@@ -2,10 +2,10 @@
 #include "Ball.h"
 #include <random>
 int main() {
-    unsigned int width = 500;
-    unsigned int height = 500;
+    unsigned int width = 200;
+    unsigned int height = 200;
     int bsize = 10;
-    int occurence = 20;
+    int occurence = 50;
     int chaos = 2;
     int tick = 0;
     float speed = 0.5f;
@@ -24,14 +24,22 @@ int main() {
             std::uniform_int_distribution<int> sz(1, bsize);
             std::uniform_int_distribution<int> ir(1, chaos);
             std::uniform_int_distribution<int> jr(1, chaos);
+            std::uniform_int_distribution<int> coinflip(0, 2);
             int bsize = sz(rd);
             int damage = 1;
             if (i % (occurence+ ir(rd)) == 0 && j % (occurence + jr(rd)) == 0) {
+                int cf = coinflip(rd);
+                while (cf ==3) {
+                    damage++;
+                    cf= coinflip(rd);
+                    std::cout << cf;
+                }
                 sf::Color tempc = sf::Color(red(rd), green(rd), blue(rd));
-                blist.push_back(new ball({ static_cast<float>(i),static_cast<float>(j) }, bsize, speed, damage, tempc));
+                blist.push_back(new ball({ static_cast<float>(i),static_cast<float>(j) }, bsize, speed, damage, cf, tempc));
             }
         }
     }
+
     while(window->isOpen()) {
         if (tick == 180) {
             tick = 0;
@@ -47,18 +55,20 @@ int main() {
         window->clear();
         
         for (int i = 0; i < blist.size();i++) {
+
             if (blist[i]->isDead()) {
                 delete blist[i];
                 blist.erase(blist.begin() + i);
+                i--;
             }
             else {
                 blist[i]->attack(blist);
                 for (int j=0; j < blist.size(); j++) {
-                    blist[i]->collide(blist[j], tick);
+                    blist[i]->collide(blist[j], tick, blist);
                 }
+                blist[i]->updateCircle();
                 window->draw(blist[i]->getCircle());
             }
-            
         }
         window->display();
     }

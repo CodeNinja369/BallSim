@@ -13,13 +13,20 @@ private:
 	bool dead;
 	int dmg;
 	int health;
-	void updateCircle();
+	int compatability;
+	
 	int internaltick;
 	float finddist(sf::Vector2<float> ppp, sf::Vector2<float> ttt);
+	bool iscomp(ball* m);
+	int getcomp();
+	ball* bread(ball* m);
+	float getSpd();
 public:
-	ball(sf::Vector2<float> p, int s, float sp, int d, sf::Color c);
+	ball(sf::Vector2<float> p, int s, float sp, int d, int cc, sf::Color c);
+	void updateCircle();
 	sf::Vector2<float> getPos();
 	sf::CircleShape getCircle();
+	sf::Color getColour();
 	int getSize();
 	int getDMG();
 	int getHealth();
@@ -28,7 +35,8 @@ public:
 	bool isDead();
 	void die();
 	void damage(int d);
-	void collide(ball* b2, int t);
+	
+	void collide(ball* b2, int t, std::vector<ball*>& ballist);
 };
 
 #endif
