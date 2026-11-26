@@ -14,7 +14,7 @@ private:
 	int dmg;
 	int health;
 	int compatability;
-	
+	int deathCountdown;
 	int internaltick;
 	float finddist(sf::Vector2<float> ppp, sf::Vector2<float> ttt);
 	bool iscomp(ball* m);
@@ -35,7 +35,7 @@ public:
 	bool isDead();
 	void die();
 	void damage(int d);
-	
+	void bound(int w, int h);
 	void collide(ball* b2, int t, std::vector<ball*>& ballist);
 };
 

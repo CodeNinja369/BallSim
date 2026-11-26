@@ -15,6 +15,7 @@ ball::ball(sf::Vector2<float> p, int s, float sp, int d, int cc, sf::Color c) {
     circle.setPosition(pos);
     circle.setFillColor(colour);
     dead = false;
+    deathCountdown = size*100;
 }
 sf::Vector2<float> ball::getPos(){
     return pos;
@@ -77,6 +78,10 @@ float ball::finddist(sf::Vector2<float> ppp, sf::Vector2<float> ttt) {
     return distance;
 }
 void ball::collide(ball* b2, int t, std::vector<ball*>& ballist) {
+    /*deathCountdown--;
+    if (deathCountdown == 0) {
+        die();
+    }*/
     float distance = finddist(b2->getPos(), this->pos);
     bool touching = distance < (this->size + b2->getSize()) && b2 != this
         && !b2->isDead() && !this->isDead();
@@ -106,6 +111,7 @@ void ball::collide(ball* b2, int t, std::vector<ball*>& ballist) {
             dmg += b2->getDMG();
             updateCircle();
         }
+        
     }
 }
 bool ball::isDead() {
@@ -136,4 +142,19 @@ ball* ball::bread(ball* m) {
     sf::Color c1 = m->getColour();
     sf::Color c2 = this->getColour();
     return new ball(m->getPos(), m->getSize() + this->getSize(), m->getSpd() + this->getSpd(), m->getDMG() + this->getDMG(), m->getcomp() + this->getcomp(), sf::Color((c1.r + c2.r) / 2, (c1.g + c2.g) / 2, (c1.b + c2.b) / 2));
+}
+
+void ball::bound(int w, int h) {
+    if (pos.x > w-size) {
+        pos.x = w-size;
+    }
+    if (pos.x-size < 0) {
+        pos.x = 0+size;
+    }
+    if (pos.y-size < 0) {
+        pos.y = 0+size;
+    }
+    if (pos.y > h-size) {
+        pos.y = h-size;
+    }
 }

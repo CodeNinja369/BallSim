@@ -2,10 +2,10 @@
 #include "Ball.h"
 #include <random>
 int main() {
-    unsigned int width = 200;
-    unsigned int height = 200;
-    int bsize = 10;
-    int occurence = 50;
+    unsigned int width = 500;
+    unsigned int height = 500;
+    int bsize = 1;
+    int occurence = 10;
     int chaos = 2;
     int tick = 0;
     float speed = 0.5f;
@@ -62,12 +62,14 @@ int main() {
                 i--;
             }
             else {
+                blist[i]->bound(width, height);
                 blist[i]->attack(blist);
                 for (int j=0; j < blist.size(); j++) {
                     blist[i]->collide(blist[j], tick, blist);
                 }
                 blist[i]->updateCircle();
                 window->draw(blist[i]->getCircle());
+                
             }
         }
         window->display();
